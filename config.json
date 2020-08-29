@@ -1,0 +1,13 @@
+﻿{
+  "connectionString": "mongodb://localhost/bestpractices",
+  "secret": "miauwuff",
+  "emailFrom": "info@LoLa.com",
+  "smtpOptions": {
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "auth": {
+      "user": "anya.rutherford@ethereal.email",
+      "pass": "praRPXSHSNw25DeMgE"
+    }
+  }
+}
