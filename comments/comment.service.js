@@ -69,6 +69,6 @@ async function getComment(page, commentId) {
 }
 
 function basicDetails(comment) {
-  const { id, content, userName, userId, updated } = comment;
-  return { id, content, userName, userId, updated };
+  const { _id, content, userName, userId, updated } = comment;
+  return { _id, content, userName, userId, updated };
 }

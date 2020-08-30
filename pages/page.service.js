@@ -1,9 +1,4 @@
-﻿const config = require("config.json");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const sendEmail = require("_helpers/send-email");
-const db = require("_helpers/db");
+﻿const db = require("_helpers/db");
 const Role = require("_helpers/role");
 
 module.exports = {
@@ -25,18 +20,14 @@ async function getById(id) {
 }
 
 async function create(page) {
-  await page.create();
-
-  return basicDetails(page);
+  const newPage = await db.Page.create(page);
+  return basicDetails(newPage);
 }
 
 async function update(id, page) {
   const pageToUpdate = await getPage(id);
-
   pageToUpdate = { ...page };
-
   await pageToUpdate.save();
-
   return basicDetails(pageToUpdate);
 }
 
@@ -47,7 +38,7 @@ async function _delete(id) {
 
 // helper functions
 
-async function getPaget(id) {
+async function getPage(id) {
   if (!db.isValidId(id)) throw "Page not found";
   const page = await db.Page.findById(id);
   if (!page) throw "Page not found";
