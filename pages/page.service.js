@@ -10,6 +10,7 @@ module.exports = {
 };
 
 async function getAll() {
+  console.log("load All");
   const page = await db.Page.find();
   return page.map((x) => basicDetails(x));
 }
@@ -25,10 +26,11 @@ async function create(page) {
 }
 
 async function update(id, page) {
-  const pageToUpdate = await getPage(id);
-  pageToUpdate = { ...page };
-  await pageToUpdate.save();
-  return basicDetails(pageToUpdate);
+  const updatedPage = await db.Page.findByIdAndUpdate(id, page, {
+    new: true,
+  });
+
+  return basicDetails(updatedPage);
 }
 
 async function _delete(id) {
@@ -46,6 +48,6 @@ async function getPage(id) {
 }
 
 function basicDetails(page) {
-  const { _id, title, slug, subtitle, content, comments } = account;
+  const { _id, title, slug, subtitle, content, comments } = page;
   return { _id, title, slug, subtitle, content, comments };
 }

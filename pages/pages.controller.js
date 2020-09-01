@@ -1,16 +1,16 @@
 ﻿const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const validateRequest = require("../comments/node_modules/_middleware/validate-request");
-const authorize = require("../comments/node_modules/_middleware/authorize");
-const Role = require("../comments/node_modules/_helpers/role");
+const validateRequest = require("../_middleware/validate-request");
+const authorize = require("../_middleware/authorize");
+const Role = require("../_helpers/role");
 const pageService = require("./page.service");
 
 // routes
 router.get("/", getAll);
 router.get("/:id", getById);
 router.post("/", authorize(), createSchema, create);
-router.put("/:id", authorize(), updateSchema, update);
+router.put("/:id", update); ///updateSchema,
 router.delete("/:id", authorize(), _delete);
 
 module.exports = router;
@@ -47,12 +47,13 @@ function create(req, res, next) {
 }
 
 function updateSchema(req, res, next) {
-  const schemaRules = {
+  const schema = {
     title: Joi.string().required(),
     slug: Joi.string().required(),
     subtitle: Joi.string(),
     content: Joi.string(),
   };
+  console.log("validate the update");
   validateRequest(req, next, schema);
 }
 
