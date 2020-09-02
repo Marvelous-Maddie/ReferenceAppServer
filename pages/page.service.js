@@ -7,6 +7,7 @@ module.exports = {
   create,
   update,
   delete: _delete,
+  getPage,
 };
 
 async function getAll() {

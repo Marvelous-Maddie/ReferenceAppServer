@@ -9,10 +9,9 @@ const commentService = require("./comment.service");
 
 // routes
 router.get("/:pageId/", getAll);
-router.get("/:pageId/:commentId", getById);
-router.post("/:pageId", authorize(), createSchema, create);
-router.put("/:pageId/:commentId", authorize(), updateSchema, update);
-router.delete("/:pageId/:commentId", authorize(), _delete);
+router.post("/:pageId", createSchema, create);
+router.put("/:pageId", updateSchema, update);
+router.delete("/:pageId/:commentId", _delete); //   authorize(),
 
 module.exports = router;
 
@@ -24,37 +23,33 @@ function getAll(req, res, next) {
     .catch(next);
 }
 
-function getById(req, res, next) {
-  const { pageId, commentId } = req.params;
-  commentService
-    .getById(pageId, commentId)
-    .then((comment) => (comment ? res.json(comment) : res.sendStatus(404)))
-    .catch(next);
-}
-
 function createSchema(req, res, next) {
   const schema = Joi.object({
     content: Joi.string().required(),
-    by: Joi.string().required(),
+    userName: Joi.string().required(),
+    userId: Joi.string().required(),
   });
   validateRequest(req, next, schema);
 }
 
 function create(req, res, next) {
+  const { pageId } = req.params;
+  console.log(req.body);
   commentService
-    .create(req.body)
-    .then((account) => res.json(account))
+    .create(pageId, req.body)
+    .then((comment) => res.json(comment))
     .catch(next);
 }
 
 function updateSchema(req, res, next) {
-  const schemaRules = {
+  const schema = Joi.object({
+    _id: Joi.string().required(),
     content: Joi.string().required(),
-  };
+  });
 
   // only admins can update role
-  if (req.user.role === Role.Admin) {
-  }
+  //if (req.user.role === Role.Admin) {
+  //}
 
   validateRequest(req, next, schema);
 }
@@ -64,9 +59,9 @@ function update(req, res, next) {
   /*   if (req.params.id !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
   } */
-  const { pageId, commentId } = req.params;
+  const { pageId } = req.params;
   commentService
-    .update(pageId, commentId, req.body)
+    .update(pageId, req.body)
     .then((comment) => res.json(comment))
     .catch(next);
 }
@@ -77,8 +72,9 @@ function _delete(req, res, next) {
     return res.status(401).json({ message: "Unauthorized" });
   } */
   const { pageId, commentId } = req.params;
+  console.log(req.body);
   commentService
     .delete(pageId, commentId)
-    .then(() => res.json({ message: "Account deleted successfully" }))
+    .then(() => res.json({ message: "Comment deleted successfully" }))
     .catch(next);
 }

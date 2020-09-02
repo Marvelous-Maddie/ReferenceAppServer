@@ -5,51 +5,54 @@ const crypto = require("crypto");
 const sendEmail = require("_helpers/send-email");
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
+const pageService = require("../pages/page.service");
 
 module.exports = {
   getAll,
-  getById,
   create,
   update,
   delete: _delete,
 };
 
 async function getAll(pageId) {
-  const page = await db.Pages.findById(pageId);
+  const page = await pageService.getPage(pageId);
   if (!page) return [];
   return page.comments.map((x) => basicDetails(x));
 }
 
-async function getById(pageId, commentId) {
-  const page = await getPage(pageId);
-  const comment = await getComment(page, commentId);
-  return basicDetails(comment);
-}
-
 async function create(pageId, comment) {
-  const page = await getPage(pageId);
+  console.log(pageId);
+  const page = await pageService.getPage(pageId);
   page.comments.push(comment);
 
   // save account
   await page.save();
 
-  return basicDetails(comment);
+  const newComment = page.comments[page.comments.length - 1];
+
+  return basicDetails(newComment);
 }
 
-async function update(pageId, commentId, commentText) {
-  const page = await getPage(pageId);
-  const comment = getComment(page, commentId);
-  comment.content = commentText;
+async function update(pageId, comment) {
+  const page = await pageService.getPage(pageId);
+
+  const ucomment = await page.comments.id(comment._id);
+
+  ucomment.content = comment.content;
 
   await page.save();
 
-  return basicDetails(comment);
+  console.log(ucomment);
+
+  return basicDetails(ucomment);
 }
 
 async function _delete(pageId, commentId) {
+  console.log(commentId);
   const page = await getPage(pageId);
-  page.comments = page.comments.filter(x._id !== commentId);
-
+  const delComment = await page.comments.id(commentId);
+  console.log(delComment);
+  delComment.remove();
   await page.save();
 }
 
@@ -63,12 +66,13 @@ async function getPage(id) {
 }
 
 async function getComment(page, commentId) {
-  const comment = page.comments.find((x) => x.id === id);
+  const comment = page.comments.find((x) => x.id === commentId);
   if (!comment) throw "Comment not found";
   return comment;
 }
 
 function basicDetails(comment) {
-  const { _id, content, userName, userId, updated } = comment;
-  return { _id, content, userName, userId, updated };
+  console.log(comment);
+  const { _id, content, userName, userId, updatedAt, createdAt } = comment;
+  return { _id, content, userName, userId, updatedAt, createdAt };
 }

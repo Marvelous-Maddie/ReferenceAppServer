@@ -21,6 +21,7 @@ app.use(
 // api routes
 app.use("/accounts", require("./accounts/accounts.controller"));
 app.use("/pages", require("./pages/pages.controller"));
+app.use("/comments", require("./comments/comments.controller"));
 
 // swagger docs route
 app.use("/api-docs", require("_helpers/swagger"));
