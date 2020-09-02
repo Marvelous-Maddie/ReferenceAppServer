@@ -33,8 +33,8 @@ function createSchema(req, res, next) {
   const schema = Joi.object({
     title: Joi.string().required(),
     slug: Joi.string().required(),
-    subtitle: Joi.string(),
-    content: Joi.string(),
+    subtitle: Joi.string().allow(""),
+    content: Joi.string().allow(""),
   });
   validateRequest(req, next, schema);
 }
@@ -50,8 +50,8 @@ function updateSchema(req, res, next) {
   const schema = {
     title: Joi.string().required(),
     slug: Joi.string().required(),
-    subtitle: Joi.string(),
-    content: Joi.string(),
+    subtitle: Joi.string().allow(""),
+    content: Joi.string().allow(""),
   };
   console.log("validate the update");
   validateRequest(req, next, schema);
