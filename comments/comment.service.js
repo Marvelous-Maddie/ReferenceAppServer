@@ -9,6 +9,7 @@ const pageService = require("../pages/page.service");
 
 module.exports = {
   getAll,
+  getOne,
   create,
   update,
   delete: _delete,
@@ -18,6 +19,12 @@ async function getAll(pageId) {
   const page = await pageService.getPage(pageId);
   if (!page) return [];
   return page.comments.map((x) => basicDetails(x));
+}
+
+async function getOne(pageId, commentId) {
+  const page = await pageService.getPage(pageId);
+  if (!page) return null;
+  return page.comments.find((x) => x._id == commentId);
 }
 
 async function create(pageId, comment) {

@@ -43,22 +43,18 @@ function create(req, res, next) {
 
 function updateSchema(req, res, next) {
   const schema = Joi.object({
-    _id: Joi.string().required(),
+    userId: Joi.string().required(),
     content: Joi.string().required(),
   });
-
-  // only admins can update role
-  //if (req.user.role === Role.Admin) {
-  //}
 
   validateRequest(req, next, schema);
 }
 
 function update(req, res, next) {
-  // users can update their own account and admins can update any account
-  /*   if (req.params.id !== req.user.id && req.user.role !== Role.Admin) {
+  // users can update their own comments and admins can update any comment
+  if (req.body.userId !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
-  } */
+  }
   const { pageId } = req.params;
   commentService
     .update(pageId, req.body)
@@ -67,11 +63,15 @@ function update(req, res, next) {
 }
 
 function _delete(req, res, next) {
-  // users can delete their own account and admins can delete any account
-  /*   if (req.params.id !== req.user.id && req.user.role !== Role.Admin) {
-    return res.status(401).json({ message: "Unauthorized" });
-  } */
   const { pageId, commentId } = req.params;
+  const comment = commentService.getOne(pageId, commentId);
+  if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+  // users can delete their own comments and admins can delete any comment
+  if (comment.userId !== req.user.id && req.user.role !== Role.Admin) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   console.log(req.body);
   commentService
     .delete(pageId, commentId)
