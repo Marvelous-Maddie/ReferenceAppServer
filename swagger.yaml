@@ -104,13 +104,7 @@ paths:
                   id:
                     type: string
                     example: "5eb12e197e06a76ccdefc121"
-                  title:
-                    type: string
-                    example: "Mr"
-                  firstName:
-                    type: string
-                    example: "Jason"
-                  lastName:
+                  userName:
                     type: string
                     example: "Watmore"
                   email:
@@ -196,13 +190,7 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
-                  example: "Mr"
-                firstName:
-                  type: string
-                  example: "Jason"
-                lastName:
+                userName:
                   type: string
                   example: "Watmore"
                 email:
@@ -217,9 +205,7 @@ paths:
                 acceptTerms:
                   type: boolean
               required:
-                - title
-                - firstName
-                - lastName
+                - userName
                 - email
                 - password
                 - confirmPassword
@@ -401,13 +387,7 @@ paths:
                     id:
                       type: string
                       example: "5eb12e197e06a76ccdefc121"
-                    title:
-                      type: string
-                      example: "Mr"
-                    firstName:
-                      type: string
-                      example: "Jason"
-                    lastName:
+                    userName:
                       type: string
                       example: "Watmore"
                     email:
@@ -437,13 +417,7 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
-                  example: "Mr"
-                firstName:
-                  type: string
-                  example: "Jason"
-                lastName:
+                userName:
                   type: string
                   example: "Watmore"
                 email:
@@ -459,9 +433,7 @@ paths:
                   type: string
                   enum: [Admin, User]
               required:
-                - title
-                - firstName
-                - lastName
+                - userName
                 - email
                 - password
                 - confirmPassword
@@ -477,13 +449,7 @@ paths:
                   id:
                     type: string
                     example: "5eb12e197e06a76ccdefc121"
-                  title:
-                    type: string
-                    example: "Mr"
-                  firstName:
-                    type: string
-                    example: "Jason"
-                  lastName:
+                  userName:
                     type: string
                     example: "Watmore"
                   email:
@@ -533,13 +499,7 @@ paths:
                   id:
                     type: string
                     example: "5eb12e197e06a76ccdefc121"
-                  title:
-                    type: string
-                    example: "Mr"
-                  firstName:
-                    type: string
-                    example: "Jason"
-                  lastName:
+                  userName:
                     type: string
                     example: "Watmore"
                   email:
@@ -571,13 +531,7 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
-                  example: "Mr"
-                firstName:
-                  type: string
-                  example: "Jason"
-                lastName:
+                userName:
                   type: string
                   example: "Watmore"
                 email:
@@ -603,13 +557,7 @@ paths:
                   id:
                     type: string
                     example: "5eb12e197e06a76ccdefc121"
-                  title:
-                    type: string
-                    example: "Mr"
-                  firstName:
-                    type: string
-                    example: "Jason"
-                  lastName:
+                  userName:
                     type: string
                     example: "Watmore"
                   email:
@@ -649,7 +597,264 @@ paths:
           $ref: "#/components/responses/NotFoundError"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
-
+  /pages:
+    get:
+      summary: Get a list of all pages
+      description: Open to all users, even when not loged in.
+      operationId: getAllPages
+      responses:
+        "200":
+          description: An array of all pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "5eb12e197e06a76ccdefc121"
+                    title:
+                      type: string
+                      example: "This is the page Title"
+                    slug:
+                      type: string
+                      example: "page1"
+                    subtitle:
+                      type: string
+                      example: "The subtitle that is displayed on the pages page"
+                    content:
+                      type: string
+                      example: "The content of the page as markdown"
+                      type: array
+                    comments:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "5eb12e197e06a76ccdefc121"
+                        userId:
+                          type: string
+                          example: "5eb12e197e06a76ccdefc121"
+                        userName:
+                          type: string
+                          example: "jbello"
+                    created:
+                      type: string
+                      example: "2020-05-05T09:12:57.848Z"
+                    updated:
+                      type: string
+                      example: "2020-05-08T03:11:21.553Z"
+    post:
+      summary: Create a new page
+      description: Restricted to admin users.
+      operationId: createPage
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "This is the page Title"
+                slug:
+                  type: string
+                  example: "page1"
+                subtitle:
+                  type: string
+                  example: "The subtitle that is displayed on the pages page"
+                content:
+                  type: string
+                  example: "The content of the page as markdown"
+              required:
+                - title
+                - slug
+      responses:
+        "200":
+          description: Page created successfully. The details of the new page are returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "5eb12e197e06a76ccdefc121"
+                  title:
+                    type: string
+                    example: "This is the page Title"
+                  slug:
+                    type: string
+                    example: "page1"
+                  subtitle:
+                    type: string
+                    example: "The subtitle that is displayed on the pages page"
+                  content:
+                    type: string
+                    example: "The content of the page as markdown"
+                  created:
+                    type: string
+                    example: "2020-05-05T09:12:57.848Z"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /pages/{id}:
+    parameters:
+      - in: path
+        name: id
+        description: Page id
+        required: true
+        example: "5eb12e197e06a76ccdefc121"
+        schema:
+          type: string
+    get:
+      summary: Get a single page by id
+      description: All user can get a page this way.
+      operationId: getPageById
+      responses:
+        "200":
+          description: Details of the specified page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "5eb12e197e06a76ccdefc121"
+                  title:
+                    type: string
+                    example: "This is the page Title"
+                  slug:
+                    type: string
+                    example: "page1"
+                  subtitle:
+                    type: string
+                    example: "The subtitle that is displayed on the pages page"
+                  content:
+                    type: string
+                    example: "The content of the page as markdown"
+                    type: array
+                  comments:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "5eb12e197e06a76ccdefc121"
+                      userId:
+                        type: string
+                        example: "5eb12e197e06a76ccdefc121"
+                      userName:
+                        type: string
+                        example: "jbello"
+                  created:
+                    type: string
+                    example: "2020-05-05T09:12:57.848Z"
+                  updated:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    put:
+      summary: Update an page
+      description: Admin users can update page.
+      operationId: updatePage
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "This is the page Title"
+                slug:
+                  type: string
+                  example: "page1"
+                subtitle:
+                  type: string
+                  example: "The subtitle that is displayed on the pages page"
+                content:
+                  type: string
+                  example: "The content of the page as markdown"
+                  type: array
+      responses:
+        "200":
+          description: Page updated successfully. The details of the updated page are returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "5eb12e197e06a76ccdefc121"
+                  title:
+                    type: string
+                    example: "This is the page Title"
+                  slug:
+                    type: string
+                    example: "page1"
+                  subtitle:
+                    type: string
+                    example: "The subtitle that is displayed on the pages page"
+                  content:
+                    type: string
+                    example: "The content of the page as markdown"
+                    type: array
+                  comments:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "5eb12e197e06a76ccdefc121"
+                      userId:
+                        type: string
+                        example: "5eb12e197e06a76ccdefc121"
+                      userName:
+                        type: string
+                        example: "jbello"
+                  created:
+                    type: string
+                    example: "2020-05-05T09:12:57.848Z"
+                  updated:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+    delete:
+    delete:
+      summary: Delete an page
+      description: Admin users can delete a page.
+      operationId: deleteAccount
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Page deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account deleted successfully"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
 components:
   securitySchemes:
     bearerAuth:
