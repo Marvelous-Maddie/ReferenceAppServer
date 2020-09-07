@@ -9,9 +9,9 @@ const commentService = require("./comment.service");
 
 // routes
 router.get("/:pageId/", getAll);
-router.post("/:pageId", createSchema, create);
-router.put("/:pageId", updateSchema, update);
-router.delete("/:pageId/:commentId", _delete); //   authorize(),
+router.post("/:pageId", authorize(), createSchema, create);
+router.put("/:pageId", authorize(), updateSchema, update);
+router.delete("/:pageId/:commentId", authorize(), _delete);
 
 module.exports = router;
 

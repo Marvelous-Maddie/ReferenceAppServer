@@ -9,9 +9,9 @@ const pageService = require("./page.service");
 // routes
 router.get("/", getAll);
 router.get("/:id", getById);
-router.post("/", authorize(), createSchema, create);
-router.put("/:id", update); ///updateSchema,
-router.delete("/:id", authorize(), _delete);
+router.post("/", authorize(Role.Admin), createSchema, create);
+router.put("/:id", authorize(Role.Admin), updateSchema, update);
+router.delete("/:id", authorize(Role.Admin), _delete);
 
 module.exports = router;
 
@@ -65,7 +65,6 @@ function update(req, res, next) {
 }
 
 function _delete(req, res, next) {
-  // users can delete their own account and admins can delete any account
   pageService
     .delete(req.params.id)
     .then(() => res.json({ message: "Page deleted successfully" }))
