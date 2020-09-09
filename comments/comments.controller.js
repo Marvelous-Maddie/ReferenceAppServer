@@ -17,6 +17,7 @@ module.exports = router;
 
 function getAll(req, res, next) {
   const { pageId } = req.params;
+  console.log("get All");
   commentService
     .getAll(pageId)
     .then((comments) => res.json(comments))
@@ -42,6 +43,7 @@ function create(req, res, next) {
 }
 
 function updateSchema(req, res, next) {
+  console.log("comment shema");
   const schema = Joi.object({
     userId: Joi.string().required(),
     content: Joi.string().required(),
@@ -51,6 +53,7 @@ function updateSchema(req, res, next) {
 }
 
 function update(req, res, next) {
+  console.log("comment update");
   // users can update their own comments and admins can update any comment
   if (req.body.userId !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });

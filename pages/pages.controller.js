@@ -47,17 +47,19 @@ function create(req, res, next) {
 }
 
 function updateSchema(req, res, next) {
-  const schema = {
+  const schema = Joi.object({
     title: Joi.string().required(),
     slug: Joi.string().required(),
     subtitle: Joi.string().allow(""),
     content: Joi.string().allow(""),
-  };
+  });
   console.log("validate the update");
   validateRequest(req, next, schema);
+  console.log("after validate the update");
 }
 
 function update(req, res, next) {
+  console.log("update page");
   pageService
     .update(req.params.id, req.body)
     .then((page) => res.json(page))

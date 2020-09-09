@@ -25,7 +25,7 @@ function authorize(roles = []) {
         // account no longer exists or role not authorized
         return res.status(401).json({ message: "Unauthorized" });
       }
-
+      console.log("auth");
       // authentication and authorization successful
       req.user.role = account.role;
       req.user.ownsToken = (token) =>

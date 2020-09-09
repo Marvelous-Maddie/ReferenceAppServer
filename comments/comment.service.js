@@ -41,7 +41,10 @@ async function create(pageId, comment) {
 }
 
 async function update(pageId, comment) {
+  console.log("update comment");
   const page = await pageService.getPage(pageId);
+  console.log(page);
+  console.log(comment);
 
   const ucomment = await page.comments.id(comment._id);
 
@@ -73,6 +76,7 @@ async function getPage(id) {
 }
 
 async function getComment(page, commentId) {
+  console.log("get Comment");
   const comment = page.comments.find((x) => x.id === commentId);
   if (!comment) throw "Comment not found";
   return comment;
