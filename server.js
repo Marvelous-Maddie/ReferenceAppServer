@@ -17,13 +17,14 @@ app.use(
   })
 );
 
+app.use(express.static("public"));
 app.use("/uploads", require("./files/files.controler"));
 app.use("/accounts", require("./accounts/accounts.controller"));
 app.use("/pages", require("./pages/pages.controller"));
 app.use("/comments", require("./comments/comments.controller"));
 
 // swagger docs route
-app.use("/api-docs", require("_helpers/swagger"));
+app.use("/api/api-docs", require("_helpers/swagger"));
 
 // global error handler
 app.use(errorHandler);
