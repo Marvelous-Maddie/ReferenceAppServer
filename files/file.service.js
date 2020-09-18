@@ -1,4 +1,4 @@
-﻿const { gfs } = require("_helpers/db");
+﻿const { gridFileStorage } = require("_helpers/db");
 const GridFsStorage = require("multer-gridfs-storage");
 
 const storage = new GridFsStorage({
@@ -24,34 +24,27 @@ module.exports = {
 };
 
 async function getAll() {
-  //console.log(gfs());
-  const files = await gfs().files.find().toArray();
+  const files = await gridFileStorage.files.find().toArray();
   return files;
 }
 
 async function getByFilename(filename) {
-  const file = await gfs().files.findOne({ filename: filename });
+  const file = await gridFileStorage.files.findOne({ filename: filename });
   return file;
 }
 
 async function getImageStream(filename) {
   const file = await getByFilename(filename);
-  console.log(file);
   if (!file) return;
-  const readstream = gfs().createReadStream(file.filename);
+  const readstream = gridFileStorage.createReadStream(file.filename);
   return readstream;
 }
 
 async function _delete(id) {
-  await gfs().remove({ _id: id, root: "uploads" });
+  await gridFileStorage.remove({ _id: id, root: "uploads" });
 }
 
 // helper functions
-
-function basicDetails(page) {
-  const { _id, title, slug, subtitle, content, comments } = page;
-  return { _id, title, slug, subtitle, content, comments };
-}
 
 function newFileName(fileName) {
   console.log("newFileName " + fileName);

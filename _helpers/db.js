@@ -16,9 +16,6 @@ const connection = mongoose.createConnection(
 );
 
 let gridFileStorage;
-const gfs = () => {
-  return gridFileStorage;
-};
 
 // Init stream
 connection.once("open", () => {
@@ -35,7 +32,7 @@ module.exports = {
   RefreshToken: require("../accounts/refresh-token.model"),
   isValidId,
   Page: require("../pages/page.model"),
-  gfs,
+  gridFileStorage,
 };
 
 function isValidId(id) {
