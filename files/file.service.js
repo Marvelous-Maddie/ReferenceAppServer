@@ -24,24 +24,24 @@ module.exports = {
 };
 
 async function getAll() {
-  const files = await gridFileStorage.files.find().toArray();
+  const files = await gridFileStorage().files.find().toArray();
   return files;
 }
 
 async function getByFilename(filename) {
-  const file = await gridFileStorage.files.findOne({ filename: filename });
+  const file = await gridFileStorage().files.findOne({ filename: filename });
   return file;
 }
 
 async function getImageStream(filename) {
   const file = await getByFilename(filename);
   if (!file) return;
-  const readstream = gridFileStorage.createReadStream(file.filename);
+  const readstream = gridFileStorage().createReadStream(file.filename);
   return readstream;
 }
 
 async function _delete(id) {
-  await gridFileStorage.remove({ _id: id, root: "uploads" });
+  await gridFileStorage().remove({ _id: id, root: "uploads" });
 }
 
 // helper functions

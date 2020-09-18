@@ -15,14 +15,15 @@ const connection = mongoose.createConnection(
   connectionOptions
 );
 
-let gridFileStorage;
+const gridFileStorage = () => gfs;
+let gfs;
 
 // Init stream
 connection.once("open", () => {
   console.log("in once");
-  gridFileStorage = Grid(connection.db, mongoose.mongo);
+  gfs = Grid(connection.db, mongoose.mongo);
   //gridFileStorage = new mongoose.mongo.GridFSBucket(connection.db);
-  gridFileStorage.collection("uploads");
+  gfs.collection("uploads");
 });
 
 mongoose.Promise = global.Promise;

@@ -27,7 +27,6 @@ async function authenticate({ email, password, ipAddress }) {
   let account;
   try {
     account = await db.Account.findOne({ email });
-    console.log("YYYYYYYYYYYYY");
   } catch (error) {
     console.log(error);
   }
@@ -205,7 +204,9 @@ async function create(params) {
 }
 
 async function update(id, params) {
+  console.log(params);
   const account = await getAccount(id);
+  console.log(account);
 
   // validate
   if (
