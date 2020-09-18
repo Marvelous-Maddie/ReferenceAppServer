@@ -36,13 +36,15 @@ function authenticateSchema(req, res, next) {
 }
 
 function authenticate(req, res, next) {
+  console.log(next);
   const { email, password } = req.body;
   const ipAddress = req.ip;
+
   accountService
     .authenticate({ email, password, ipAddress })
     .then(({ refreshToken, ...account }) => {
       setTokenCookie(res, refreshToken);
-      res.json(account);
+      return res.json(account);
     })
     .catch(next);
 }

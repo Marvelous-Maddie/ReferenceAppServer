@@ -23,11 +23,21 @@ module.exports = {
 };
 
 async function authenticate({ email, password, ipAddress }) {
-  const account = await db.Account.findOne({ email });
+  console.log("in auth-service");
+  let account;
+  try {
+    account = await db.Account.findOne({ email });
+    console.log("YYYYYYYYYYYYY");
+  } catch (error) {
+    console.log(error);
+  }
+  //const account = await db.Account.findOne({ email });
+  console.log("in auth-service 2");
+  console.log(account);
 
   if (
     !account ||
-    !account.isVerified ||
+    // !account.isVerified ||
     !bcrypt.compareSync(password, account.passwordHash)
   ) {
     throw "Email or password is incorrect";
@@ -40,12 +50,17 @@ async function authenticate({ email, password, ipAddress }) {
   // save refresh token
   await refreshToken.save();
 
+  console.log("Verification ok");
+
   // return basic details and tokens
-  return {
+  const tmp = {
     ...basicDetails(account),
     jwtToken,
     refreshToken: refreshToken.token,
   };
+
+  console.log(tmp);
+  return tmp;
 }
 
 async function refreshToken({ token, ipAddress }) {
@@ -261,6 +276,7 @@ function randomTokenString() {
 }
 
 function basicDetails(account) {
+  console.log(account);
   const { id, userName, email, role, created, updated, isVerified } = account;
   return { id, userName, email, role, created, updated, isVerified };
 }
