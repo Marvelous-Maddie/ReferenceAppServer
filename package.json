@@ -1,14 +1,14 @@
 {
-  "name": "node-mongo-signup-verification-api",
+  "name": "referenceappserver",
   "version": "1.0.0",
-  "description": "NodeJS + MongoDB API for Email Sign Up with Verification, Authentication & Forgot Password",
+  "description": "A reference app for a server running the mern stack",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cornflourblue/node-mongo-signup-verification-api.git"
+    "url": "https://github.com/jbello88/ReferenceAppServer"
   },
   "scripts": {
-    "start": "nodemon ./server.js",
+    "start": "node ./server.js",
     "start:dev": "nodemon ./server.js"
   },
   "dependencies": {

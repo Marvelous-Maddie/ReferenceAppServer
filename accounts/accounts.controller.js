@@ -233,7 +233,7 @@ function update(req, res, next) {
   if (req.params.id !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
+  console.log("Im Update");
   accountService
     .update(req.params.id, req.body)
     .then((account) => res.json(account))
