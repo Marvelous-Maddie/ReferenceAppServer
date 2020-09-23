@@ -12,6 +12,7 @@ const errorHandler = require("_middleware/error-handler");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 app.use(
   cors({
