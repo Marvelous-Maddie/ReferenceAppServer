@@ -17,7 +17,6 @@ router.delete("/:id", authorize(Role.Admin), _delete);
 module.exports = router;
 
 function getAll(req, res, next) {
-  console.log("get All files");
   fileService
     .getAll()
     .then((files) => res.json(files))

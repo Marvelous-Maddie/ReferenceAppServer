@@ -36,7 +36,6 @@ function authenticateSchema(req, res, next) {
 }
 
 function authenticate(req, res, next) {
-  console.log(next);
   const { email, password } = req.body;
   const ipAddress = req.ip;
 
@@ -72,7 +71,6 @@ function revokeToken(req, res, next) {
   // accept token from request body or cookie
   const token = req.body.token || req.cookies.refreshToken;
   const ipAddress = req.ip;
-  console.log("Revoking Token");
   if (!token) return res.status(400).json({ message: "Token is required" });
 
   // users can revoke their own tokens and admins can revoke any tokens
@@ -233,7 +231,6 @@ function update(req, res, next) {
   if (req.params.id !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  console.log("Im Update");
   accountService
     .update(req.params.id, req.body)
     .then((account) => res.json(account))

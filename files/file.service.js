@@ -47,7 +47,6 @@ async function _delete(id) {
 // helper functions
 
 function newFileName(fileName) {
-  console.log("newFileName " + fileName);
   const parts = fileName.split(".");
   const extension = parts.pop();
   const rest = parts.join(".");

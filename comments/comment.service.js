@@ -28,7 +28,6 @@ async function getOne(pageId, commentId) {
 }
 
 async function create(pageId, comment) {
-  console.log(pageId);
   const page = await pageService.getPage(pageId);
   page.comments.push(comment);
 
@@ -41,27 +40,18 @@ async function create(pageId, comment) {
 }
 
 async function update(pageId, comment) {
-  console.log("update comment");
   const page = await pageService.getPage(pageId);
-  console.log(page);
-  console.log(comment);
-
   const ucomment = await page.comments.id(comment._id);
-
   ucomment.content = comment.content;
 
   await page.save();
-
-  console.log(ucomment);
 
   return basicDetails(ucomment);
 }
 
 async function _delete(pageId, commentId) {
-  console.log(commentId);
   const page = await getPage(pageId);
   const delComment = await page.comments.id(commentId);
-  console.log(delComment);
   delComment.remove();
   await page.save();
 }
@@ -76,14 +66,12 @@ async function getPage(id) {
 }
 
 async function getComment(page, commentId) {
-  console.log("get Comment");
   const comment = page.comments.find((x) => x.id === commentId);
   if (!comment) throw "Comment not found";
   return comment;
 }
 
 function basicDetails(comment) {
-  console.log(comment);
   const { _id, content, userName, userId, updatedAt, createdAt } = comment;
   return { _id, content, userName, userId, updatedAt, createdAt };
 }

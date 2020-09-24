@@ -23,16 +23,12 @@ module.exports = {
 };
 
 async function authenticate({ email, password, ipAddress }) {
-  console.log("in auth-service");
   let account;
   try {
     account = await db.Account.findOne({ email });
   } catch (error) {
     console.log(error);
   }
-  //const account = await db.Account.findOne({ email });
-  console.log("in auth-service 2");
-  console.log(account);
 
   if (
     !account ||
@@ -49,8 +45,6 @@ async function authenticate({ email, password, ipAddress }) {
   // save refresh token
   await refreshToken.save();
 
-  console.log("Verification ok");
-
   // return basic details and tokens
   const tmp = {
     ...basicDetails(account),
@@ -58,7 +52,6 @@ async function authenticate({ email, password, ipAddress }) {
     refreshToken: refreshToken.token,
   };
 
-  console.log(tmp);
   return tmp;
 }
 
@@ -204,10 +197,7 @@ async function create(params) {
 }
 
 async function update(id, params) {
-  console.log(params);
   const account = await getAccount(id);
-  console.log(account);
-
   // validate
   if (
     account.email !== params.email &&
@@ -277,7 +267,6 @@ function randomTokenString() {
 }
 
 function basicDetails(account) {
-  console.log(account);
   const { id, userName, email, role, created, updated, isVerified } = account;
   return { id, userName, email, role, created, updated, isVerified };
 }

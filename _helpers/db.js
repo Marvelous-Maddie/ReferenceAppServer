@@ -20,7 +20,6 @@ let gfs;
 
 // Init stream
 connection.once("open", () => {
-  console.log("in once");
   gfs = Grid(connection.db, mongoose.mongo);
   //gridFileStorage = new mongoose.mongo.GridFSBucket(connection.db);
   gfs.collection("uploads");

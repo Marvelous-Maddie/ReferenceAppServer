@@ -17,7 +17,6 @@ module.exports = router;
 
 function getAll(req, res, next) {
   const { pageId } = req.params;
-  console.log("get All");
   commentService
     .getAll(pageId)
     .then((comments) => res.json(comments))
@@ -35,7 +34,6 @@ function createSchema(req, res, next) {
 
 function create(req, res, next) {
   const { pageId } = req.params;
-  console.log(req.body);
   commentService
     .create(pageId, req.body)
     .then((comment) => res.json(comment))
@@ -43,7 +41,6 @@ function create(req, res, next) {
 }
 
 function updateSchema(req, res, next) {
-  console.log("comment shema");
   const schema = Joi.object({
     userId: Joi.string().required(),
     content: Joi.string().required(),
@@ -53,7 +50,6 @@ function updateSchema(req, res, next) {
 }
 
 function update(req, res, next) {
-  console.log("comment update");
   // users can update their own comments and admins can update any comment
   if (req.body.userId !== req.user.id && req.user.role !== Role.Admin) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -75,7 +71,6 @@ function _delete(req, res, next) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  console.log(req.body);
   commentService
     .delete(pageId, commentId)
     .then(() => res.json({ message: "Comment deleted successfully" }))

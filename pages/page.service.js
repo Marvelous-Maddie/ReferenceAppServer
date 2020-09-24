@@ -11,7 +11,6 @@ module.exports = {
 };
 
 async function getAll() {
-  console.log("load All");
   const page = await db.Page.find();
   return page.map((x) => basicDetails(x));
 }
