@@ -21,6 +21,10 @@ const schema = new Schema(
     slug: { type: String, unique: true, required: true },
     subtitle: { type: String },
     content: { type: String },
+    ownerName: { type: String },
+    ownerId: {
+      type: Schema.Types.ObjectId,
+    },
     comments: { type: [CommentSchema] },
   },
   {

@@ -9,9 +9,9 @@ const pageService = require("./page.service");
 // routes
 router.get("/", getAll);
 router.get("/:id", getById);
-router.post("/", authorize(Role.Admin), createSchema, create);
-router.put("/:id", authorize(Role.Admin), updateSchema, update);
-router.delete("/:id", authorize(Role.Admin), _delete);
+router.post("/", authorize(), createSchema, create);
+router.put("/:id", authorize(), updateSchema, update);
+router.delete("/:id", authorize(), _delete);
 
 module.exports = router;
 
@@ -35,6 +35,8 @@ function createSchema(req, res, next) {
     slug: Joi.string().required(),
     subtitle: Joi.string().allow(""),
     content: Joi.string().allow(""),
+    ownerName: Joi.string().required(),
+    ownerId: Joi.string().required(),
   });
   validateRequest(req, next, schema);
 }
@@ -53,22 +55,36 @@ function updateSchema(req, res, next) {
     subtitle: Joi.string().allow(""),
     content: Joi.string().allow(""),
   });
-  console.log("validate the update");
   validateRequest(req, next, schema);
-  console.log("after validate the update");
 }
 
 function update(req, res, next) {
-  console.log("update page");
+  // users can update their own pages and admins can update any page
+  const pageId = req.params.id;
+  const page = pageService.getById(pageId);
+  if (!page) return res.status(404).json({ message: "Page not found" });
+
+  if (page.ownerId !== req.user.id && req.user.role !== Role.Admin) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   pageService
-    .update(req.params.id, req.body)
+    .update(pageId, req.body)
     .then((page) => res.json(page))
     .catch(next);
 }
 
 function _delete(req, res, next) {
+  const pageId = req.params.id;
+  const page = pageService.getById(pageId);
+  if (!page) return res.status(404).json({ message: "Page not found" });
+
+  if (page.ownerId !== req.user.id && req.user.role !== Role.Admin) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   pageService
-    .delete(req.params.id)
+    .delete(pageId)
     .then(() => res.json({ message: "Page deleted successfully" }))
     .catch(next);
 }

@@ -49,6 +49,15 @@ async function getPage(id) {
 }
 
 function basicDetails(page) {
-  const { _id, title, slug, subtitle, content, comments } = page;
-  return { _id, title, slug, subtitle, content, comments };
+  const {
+    _id,
+    title,
+    slug,
+    subtitle,
+    content,
+    comments,
+    ownerName,
+    ownerId,
+  } = page;
+  return { _id, title, slug, subtitle, content, comments, ownerName, ownerId };
 }
