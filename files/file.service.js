@@ -1,14 +1,15 @@
-﻿const { gridFileStorage } = require("_helpers/db");
-const GridFsStorage = require("multer-gridfs-storage");
+﻿const { gridFileStorage } = require('_helpers/db');
+const GridFsStorage = require('multer-gridfs-storage');
+const config = require('../config');
 
 const storage = new GridFsStorage({
-  url: process.env.MONGODB_URI,
+  url: config.connectionString,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       const filename = newFileName(file.originalname);
       const fileInfo = {
         filename: filename,
-        bucketName: "uploads",
+        bucketName: 'uploads',
       };
       resolve(fileInfo);
     });
@@ -41,15 +42,15 @@ async function getImageStream(filename) {
 }
 
 async function _delete(id) {
-  await gridFileStorage().remove({ _id: id, root: "uploads" });
+  await gridFileStorage().remove({ _id: id, root: 'uploads' });
 }
 
 // helper functions
 
 function newFileName(fileName) {
-  const parts = fileName.split(".");
+  const parts = fileName.split('.');
   const extension = parts.pop();
-  const rest = parts.join(".");
+  const rest = parts.join('.');
   const random = Math.floor(Math.random() * 10000);
-  return rest + random + "." + extension;
+  return rest + random + '.' + extension;
 }

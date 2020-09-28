@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const Grid = require("gridfs-stream");
+const mongoose = require('mongoose');
+const config = require('../config');
+const Grid = require('gridfs-stream');
 
 const connectionOptions = {
   useCreateIndex: true,
@@ -8,30 +9,27 @@ const connectionOptions = {
   useFindAndModify: false,
 };
 
-mongoose.connect(process.env.MONGODB_URI, connectionOptions);
+mongoose.connect(config.connectionString, connectionOptions);
 
-const connection = mongoose.createConnection(
-  process.env.MONGODB_URI,
-  connectionOptions
-);
+const connection = mongoose.createConnection(config.connectionString, connectionOptions);
 
 const gridFileStorage = () => gfs;
 let gfs;
 
 // Init stream
-connection.once("open", () => {
+connection.once('open', () => {
   gfs = Grid(connection.db, mongoose.mongo);
   //gridFileStorage = new mongoose.mongo.GridFSBucket(connection.db);
-  gfs.collection("uploads");
+  gfs.collection('uploads');
 });
 
 mongoose.Promise = global.Promise;
 
 module.exports = {
-  Account: require("../accounts/account.model"),
-  RefreshToken: require("../accounts/refresh-token.model"),
+  Account: require('../accounts/account.model'),
+  RefreshToken: require('../accounts/refresh-token.model'),
   isValidId,
-  Page: require("../pages/page.model"),
+  Page: require('../pages/page.model'),
   gridFileStorage,
 };
 

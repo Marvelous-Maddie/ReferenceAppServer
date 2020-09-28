@@ -1,18 +1,19 @@
-﻿require("rootpath")();
-const express = require("express");
+﻿require('rootpath')();
+const express = require('express');
 const app = express();
-require("dotenv").config();
-const winston = require("winston"),
-  expressWinston = require("express-winston");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const errorHandler = require("_middleware/error-handler");
+const dotenv = require('dotenv');
+dotenv.config();
+// const winston = require("winston"),
+// expressWinston = require("express-winston");
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const errorHandler = require('_middleware/error-handler');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.set("trust proxy", 1);
+app.set('trust proxy', 1);
 
 app.use(
   cors({
@@ -38,21 +39,20 @@ app.use(
   })
 ); */
 
-app.use(express.static("public"));
-app.use("/files", require("./files/files.controler"));
-app.use("/accounts", require("./accounts/accounts.controller"));
-app.use("/pages", require("./pages/pages.controller"));
-app.use("/comments", require("./comments/comments.controller"));
+app.use(express.static('public'));
+app.use('/files', require('./files/files.controler'));
+app.use('/accounts', require('./accounts/accounts.controller'));
+app.use('/pages', require('./pages/pages.controller'));
+app.use('/comments', require('./comments/comments.controller'));
 
 // swagger docs route
-app.use("/api/api-docs", require("_helpers/swagger"));
+app.use('/api/api-docs', require('_helpers/swagger'));
 
 // global error handler
 app.use(errorHandler);
 
 // start server
-const port =
-  process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 4000;
+const port = process.env.NODE_ENV === 'production' ? process.env.PORT || 80 : 4000;
 app.listen(port, () => {
-  console.log("Server listening on port " + port);
+  console.log('Server listening on port ' + port);
 });

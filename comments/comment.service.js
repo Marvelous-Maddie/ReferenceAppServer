@@ -1,11 +1,5 @@
-﻿const config = require("config.json");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const sendEmail = require("_helpers/send-email");
-const db = require("_helpers/db");
-const Role = require("_helpers/role");
-const pageService = require("../pages/page.service");
+﻿const db = require('_helpers/db');
+const pageService = require('../pages/page.service');
 
 module.exports = {
   getAll,
@@ -18,13 +12,13 @@ module.exports = {
 async function getAll(pageId) {
   const page = await pageService.getPage(pageId);
   if (!page) return [];
-  return page.comments.map((x) => basicDetails(x));
+  return page.comments.map(x => basicDetails(x));
 }
 
 async function getOne(pageId, commentId) {
   const page = await pageService.getPage(pageId);
   if (!page) return null;
-  return page.comments.find((x) => x._id == commentId);
+  return page.comments.find(x => x._id == commentId);
 }
 
 async function create(pageId, comment) {
@@ -59,15 +53,15 @@ async function _delete(pageId, commentId) {
 // helper functions
 
 async function getPage(id) {
-  if (!db.isValidId(id)) throw "Page not found";
+  if (!db.isValidId(id)) throw 'Page not found';
   const page = await db.Page.findById(id);
-  if (!page) throw "Page not found";
+  if (!page) throw 'Page not found';
   return page;
 }
 
 async function getComment(page, commentId) {
-  const comment = page.comments.find((x) => x.id === commentId);
-  if (!comment) throw "Comment not found";
+  const comment = page.comments.find(x => x.id === commentId);
+  if (!comment) throw 'Comment not found';
   return comment;
 }
 
